@@ -2,7 +2,6 @@ package com.kata.utility;
 
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,12 +18,13 @@ public final class StringCalculator {
 
 		final AtomicReference<BigInteger> sum = new AtomicReference<>(BigInteger.ZERO);
 
-		Arrays.asList(numbers.split(",")).forEach(number -> {
+		Arrays.asList(numbers.split(",|\\n")).forEach(number -> {
 
-			sum.updateAndGet((BigInteger no) -> {
+			if (!StringUtils.isEmpty(number)) {
+				sum.updateAndGet((BigInteger no) -> {
 					return no.add(new BigInteger(number));
-			});
-			// sum.addAndGet(Integer.parseInt(number));
+				});
+			}
 		});
 
 		return sum.get();

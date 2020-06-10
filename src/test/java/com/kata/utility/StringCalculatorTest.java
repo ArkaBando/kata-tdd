@@ -32,7 +32,7 @@ public class StringCalculatorTest {
 		assertNotNull(result);
 		assertEquals(TestUtils.expectedResultMap.get("NUMBERS_WITH_COMMA_DELIMITED"), result.intValue());
 	}
-	
+
 	@Test
 	public void testAddWithCommaAndNewlineDelimited() throws StringCalculatorException {
 		BigInteger result = calculator.add(TestUtils.NUMBERS_WITH_COMMA_AND_NEWLINE_DELIMITED);
@@ -83,7 +83,7 @@ public class StringCalculatorTest {
 	@Test
 	public void testAddWithSpaceSeparatedParameter() throws StringCalculatorException {
 		Assertions.assertThrows(StringCalculatorException.class, () -> {
-			BigInteger result = calculator.add(TestUtils.NUMBERS_WITH_COMMA_DELIMITED_SPACED);
+			calculator.add(TestUtils.NUMBERS_WITH_COMMA_DELIMITED_SPACED);
 		});
 	}
 
