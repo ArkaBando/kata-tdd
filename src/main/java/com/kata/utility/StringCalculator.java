@@ -43,6 +43,6 @@ public final class StringCalculator {
 	}
 
 	public static boolean isNumericWithCommaDelimiter(String s) {
-		return s != null && s.matches("^[0-9,]*$");
+		return s != null && s.matches("^[0-9,\\n]*$");
 	}
 }
