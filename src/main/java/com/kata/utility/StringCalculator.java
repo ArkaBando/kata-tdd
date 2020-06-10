@@ -15,27 +15,40 @@ public final class StringCalculator {
 
 	public BigInteger add(String numbers) throws StringCalculatorException {
 
-		if (filterAndValidateArgument(numbers) == 0) {
-			return BigInteger.ZERO;
-		}
-
-		if (delimiters.size() > 0) {
-			numbers = numbers.substring(numbers.indexOf("\n") + 1);
-		}
-
 		final AtomicReference<BigInteger> sum = new AtomicReference<>(BigInteger.ZERO);
+		final List<String> negativeNumbers = new ArrayList<>();
 
-		Arrays.asList(numbers.split(",|\\n" + (delimiters.size() > 0 ? "|" + delimiters.get(0) : "")))
-				.forEach(number -> {
+		try {
+			if (filterAndValidateArgument(numbers) == 0) {
+				return BigInteger.ZERO;
+			}
 
-					if (!StringUtils.isEmpty(number)) {
-						sum.updateAndGet((BigInteger no) -> {
-							return no.add(new BigInteger(number));
-						});
-					}
-				});
+			if (delimiters.size() > 0) {
+				numbers = numbers.substring(numbers.indexOf("\n") + 1);
+			}
 
-		delimiters.clear();
+			Arrays.asList(numbers.split(",|\\n" + (delimiters.size() > 0 ? "|" + delimiters.get(0) : "")))
+					.forEach(number -> {
+
+						if (!StringUtils.isEmpty(number)) {
+							sum.updateAndGet((BigInteger no) -> {
+								if (new BigInteger(number).compareTo(BigInteger.ZERO) < 0) {
+									negativeNumbers.add(new BigInteger(number).toString());
+									return no;
+								}
+								return no.add(new BigInteger(number));
+							});
+						}
+					});
+		} finally {
+			delimiters.clear();
+		}
+
+		if (negativeNumbers.size() > 0) {
+			StringBuilder negativeNumberResult = new StringBuilder();
+			negativeNumbers.forEach(negativeNumberResult::append);
+			throw new StringCalculatorException("NegativeNumbers :" + negativeNumberResult + " Not Allowed");
+		}
 		return sum.get();
 	}
 
@@ -62,6 +75,6 @@ public final class StringCalculator {
 		if (null != s && delimiters.size() > 0) {
 			s = s.replace(delimiters.get(0), "").replace("//", "");
 		}
-		return s != null && s.matches("^[0-9,\\n]*$");
+		return s != null && s.matches("^[0-9,\\n-]*$");
 	}
 }
