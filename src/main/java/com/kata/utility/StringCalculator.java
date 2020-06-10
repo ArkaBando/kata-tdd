@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -27,7 +29,7 @@ public final class StringCalculator {
 	 * @param numbers like 1,2,3,4,5
 	 * @return calculatedSum of numbers
 	 * @throws StringCalculatorException when number is negative or numbers is in
-	 * invalid format
+	 *                                   invalid format
 	 */
 	public BigInteger add(String numbers) throws StringCalculatorException {
 
@@ -39,14 +41,22 @@ public final class StringCalculator {
 			if (filterAndValidateArgument(numbers) == 0) {
 				return BigInteger.ZERO;
 			}
+			String splitter = ",|\\n";
 			if (delimiters.size() > 0) {
 				numbers = numbers.substring(numbers.indexOf("\n") + 1);
+				StringBuilder splitters = new StringBuilder(splitter);
+				for (String delimiter : delimiters) {
+					if (splitters.toString().indexOf(delimiter) != 0) {
+						splitters.append("|").append(delimiter);
+					}
+				}
+
+				splitter = splitters.toString();
 			}
 
-			Arrays.asList(numbers.split(",|\\n" + (delimiters.size() > 0 ? "|" + delimiters.get(0) : "")))
-					.forEach(number -> {
-						calculateSum(sum, negativeNumbers, number);
-					});
+			Arrays.asList(numbers.split(splitter)).forEach(number -> {
+				calculateSum(sum, negativeNumbers, number);
+			});
 
 		} finally {
 			delimiters.clear();
@@ -85,6 +95,16 @@ public final class StringCalculator {
 		}
 	}
 
+	private void addDelimetersFromText(String text) {
+		Pattern regex = Pattern.compile("\\[(.*?)\\]");
+		Matcher regexMatcher = regex.matcher(text);
+
+		while (regexMatcher.find()) {
+			delimiters.add(regexMatcher.group(1));
+		}
+
+	}
+
 	/**
 	 * For filtering and validating user input numbers
 	 * 
@@ -95,8 +115,9 @@ public final class StringCalculator {
 	private Integer filterAndValidateArgument(String numbers) throws StringCalculatorException {
 
 		if (null != numbers && numbers.indexOf("//") == 0) {
-			String delimiter = numbers.substring(2, numbers.indexOf("\n"));
-			delimiters.add(delimiter);
+			String delimiterContainningText = numbers.substring(2, numbers.indexOf("\n"));
+			addDelimetersFromText(delimiterContainningText);
+			// delimiters.add(delimiter);
 		}
 
 		if (null != numbers && numbers.trim().equals("")) {
@@ -114,13 +135,16 @@ public final class StringCalculator {
 	/**
 	 * Used for validating user number string
 	 * 
-	 * @param s
+	 * @param text
 	 * @return
 	 */
-	public static boolean isValidNumber(String s) {
-		if (null != s && delimiters.size() > 0) {
-			s = s.replace(delimiters.get(0), "").replace("//", "");
+	public static boolean isValidNumber(String text) {
+		if (null != text && delimiters.size() > 0) {
+			text = text.substring(text.indexOf("\n") + 1);
+			for (String delimiter : delimiters) {
+				text = text.replace(delimiter, "");
+			}
 		}
-		return s != null && s.matches("^[0-9,\\n-]*$");
+		return text != null && text.matches("^[0-9,\\n-]*$");
 	}
 }

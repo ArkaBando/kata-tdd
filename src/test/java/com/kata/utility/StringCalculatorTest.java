@@ -39,6 +39,13 @@ public class StringCalculatorTest {
 		assertNotNull(result);
 		assertEquals(TestUtils.expectedResultMap.get("NUMBERS_WITH_COMMA_DELIMITED"), result.intValue());
 	}
+	
+	@Test
+	public void testAddWithCustomSymbolsAsDelimiter() throws StringCalculatorException {
+		BigInteger result = calculator.add(TestUtils.NUMBERS_WITH_CUSTOM_SYMBOLS_DELIMITED);
+		assertNotNull(result);
+		assertEquals(TestUtils.expectedResultMap.get("NUMBERS_WITH_COMMA_DELIMITED"), result.intValue());
+	}
 
 	@Test
 	public void testAddWithCommaAndNewlineDelimited() throws StringCalculatorException {

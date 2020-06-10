@@ -15,7 +15,8 @@ public final class TestUtils {
 	public static final String NUMBERS_WITH_COMMA_DELIMITED_ALPHANUMERIC = "1,2,3,4,5,b,fstrgfd";
 	public static final String NUMBERS_WITH_COMMA_DELIMITED_SPACED = "1,2, 3,4 ,5,, , ,";
 	public static final String NUMBERS_WITH_COMMA_DELIMITED_WITHOUT_SPACE_TRIMMED_VALUES = "1,2, 3, 4 ,5";
-	public static final String NUMBERS_WITH_CUSTOM_SYMBOL_DELIMITED = "//;\n1,2,\n3,4;5";
+	public static final String NUMBERS_WITH_CUSTOM_SYMBOL_DELIMITED = "//[;]\n1,2,\n3,4;5";
+	public static final String NUMBERS_WITH_CUSTOM_SYMBOLS_DELIMITED = "//[;][***]\n1,2,\n3***4;5";
 
 	public static final HashMap<String, Integer> expectedResultMap = new HashMap<>();
 
