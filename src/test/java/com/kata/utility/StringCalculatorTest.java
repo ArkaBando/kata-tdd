@@ -61,13 +61,13 @@ public class StringCalculatorTest {
 		}).getMessage();
 		assertEquals(message, "Invalid String , numbers is either alphanumeric or it is improperly delimited");
 	}
-	
+
 	@Test
 	public void testAddWithNegativeNumbers() throws StringCalculatorException {
 		String message = Assertions.assertThrows(StringCalculatorException.class, () -> {
 			calculator.add(TestUtils.NUMBERS_WITH_COMMA_DELIMITED_NEGATIVE_NUMBER);
 		}).getMessage();
-		
+
 		assertNotNull(message);
 		assertEquals("NegativeNumbers :-5-10 Not Allowed", message);
 	}
@@ -106,11 +106,8 @@ public class StringCalculatorTest {
 
 	@Test
 	public void testAddWithLargeNumberAsParameter() throws StringCalculatorException {
-		assertEquals(
-				calculator.add(new BigInteger("1234567890123456789012345678901234567890").toString() + ","
-						+ new BigInteger("1234567890123456789012345678901234567890").toString()),
-				new BigInteger("1234567890123456789012345678901234567890")
-						.add(new BigInteger("1234567890123456789012345678901234567890")));
+		assertEquals(calculator.add(new BigInteger("1234567890123456789012345678901234567890").toString() + ","
+				+ new BigInteger("1234567890123456789012345678901234567890").toString()), BigInteger.ZERO);
 	}
 
 	@AfterAll
