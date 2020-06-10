@@ -45,12 +45,7 @@ public final class StringCalculator {
 			if (delimiters.size() > 0) {
 				numbers = numbers.substring(numbers.indexOf("\n") + 1);
 				StringBuilder splitters = new StringBuilder(splitter);
-				for (String delimiter : delimiters) {
-					if (splitters.toString().indexOf(delimiter) != 0) {
-						splitters.append("|").append(delimiter);
-					}
-				}
-
+				fetchSpiltter(splitters);
 				splitter = splitters.toString();
 			}
 
@@ -68,6 +63,17 @@ public final class StringCalculator {
 			throw new StringCalculatorException("NegativeNumbers :" + negativeNumberResult + " Not Allowed");
 		}
 		return sum.get();
+	}
+
+	private void fetchSpiltter(StringBuilder splitters) {
+		for (String delimiter : delimiters) {
+			if (splitters.toString().indexOf(delimiter) != 0) {
+				delimiter = delimiter.replace("*", "\\*");
+				delimiter = delimiter.replace("+", "\\+");
+				delimiter = delimiter.replace("^", "\\^");
+				splitters.append("|").append(delimiter);
+			}
+		}
 	}
 
 	/**
