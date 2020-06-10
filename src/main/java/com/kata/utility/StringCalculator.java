@@ -1,7 +1,9 @@
 package com.kata.utility;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.commons.lang3.StringUtils;
@@ -9,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.kata.exception.StringCalculatorException;
 
 public final class StringCalculator {
+	private static final List<String> delimiters = new ArrayList<>();
 
 	public BigInteger add(String numbers) throws StringCalculatorException {
 
@@ -16,21 +19,33 @@ public final class StringCalculator {
 			return BigInteger.ZERO;
 		}
 
+		if (delimiters.size() > 0) {
+			numbers = numbers.substring(numbers.indexOf("\n") + 1);
+		}
+
 		final AtomicReference<BigInteger> sum = new AtomicReference<>(BigInteger.ZERO);
 
-		Arrays.asList(numbers.split(",|\\n")).forEach(number -> {
+		Arrays.asList(numbers.split(",|\\n" + (delimiters.size() > 0 ? "|" + delimiters.get(0) : "")))
+				.forEach(number -> {
 
-			if (!StringUtils.isEmpty(number)) {
-				sum.updateAndGet((BigInteger no) -> {
-					return no.add(new BigInteger(number));
+					if (!StringUtils.isEmpty(number)) {
+						sum.updateAndGet((BigInteger no) -> {
+							return no.add(new BigInteger(number));
+						});
+					}
 				});
-			}
-		});
 
+		delimiters.clear();
 		return sum.get();
 	}
 
 	private Integer filterAndValidateArgument(String numbers) throws StringCalculatorException {
+
+		if (null != numbers && numbers.indexOf("//") == 0) {
+			String delimiter = numbers.substring(2, numbers.indexOf("\n"));
+			delimiters.add(delimiter);
+		}
+
 		if (null != numbers && numbers.trim().equals("")) {
 			return 0;
 		} else if (StringUtils.isEmpty(numbers)) {
@@ -39,10 +54,14 @@ public final class StringCalculator {
 			throw new StringCalculatorException(
 					"Invalid String , numbers is either alphanumeric or it is improperly delimited");
 		}
+
 		return 1;
 	}
 
 	public static boolean isNumericWithCommaDelimiter(String s) {
+		if (null != s && delimiters.size() > 0) {
+			s = s.replace(delimiters.get(0), "").replace("//", "");
+		}
 		return s != null && s.matches("^[0-9,\\n]*$");
 	}
 }
