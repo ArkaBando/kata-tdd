@@ -25,7 +25,7 @@ public class StringCalculatorTest {
 	}
 
 	@Test
-	public void testAdd() {
+	public void testAdd() throws StringCalculatorException {
 		Integer result = calculator.add(TestUtils.NUMBERS_WITH_COMMA_DELIMITED);
 		assertNotNull(result);
 		assertEquals(TestUtils.expectedResultMap.get("NUMBERS_WITH_COMMA_DELIMITED"), result);
@@ -37,12 +37,13 @@ public class StringCalculatorTest {
 			calculator.add(null);
 		});
 	}
-	
+
 	@Test
 	public void testAddWithEmptyParameter() {
-		Assertions.assertThrows(StringCalculatorException.class, () -> {
+		String message = Assertions.assertThrows(StringCalculatorException.class, () -> {
 			calculator.add("");
-		});
+		}).getMessage();
+		assertEquals(message, "Null or Empty numbers are not allowed");
 	}
 
 	@AfterAll
