@@ -1,5 +1,5 @@
 # kata-tdd
-TDD with kata i.e. String Calculator using Junit and java 8
+TDD with kata i.e. String Calculator using Junit and java 8 , for more please refer https://osherove.com/tdd-kata-2/
 
 Tools needed:
 
