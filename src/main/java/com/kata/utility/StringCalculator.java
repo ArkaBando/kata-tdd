@@ -11,11 +11,13 @@ public final class StringCalculator {
 
 	public Integer add(String numbers) throws StringCalculatorException {
 
-		
-		if (StringUtils.isEmpty(numbers)) {
+		if (null != numbers && numbers.trim().equals("")) {
+			return 0;
+		}else if (StringUtils.isEmpty(numbers)) {
 			throw new StringCalculatorException("Null or Empty numbers are not allowed");
-		} else if(!isNumericWithCommaDelimiter(numbers)) {
-			throw new StringCalculatorException("Invalid String , numbers is either alphanumeric or it is improperly delimited");
+		} else if (!isNumericWithCommaDelimiter(numbers)) {
+			throw new StringCalculatorException(
+					"Invalid String , numbers is either alphanumeric or it is improperly delimited");
 		}
 
 		final AtomicInteger sum = new AtomicInteger(0);
