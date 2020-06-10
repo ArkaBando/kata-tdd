@@ -3,6 +3,8 @@ package com.kata.utility;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.math.BigInteger;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -59,6 +61,11 @@ public class StringCalculatorTest {
 	}
 
 	@Test
+	public void testAddWithOneParameter() throws StringCalculatorException {
+		assertEquals(calculator.add("1"), 1);
+	}
+
+	@Test
 	public void testAddWithAlphanumericParameter() {
 		String message = Assertions.assertThrows(StringCalculatorException.class, () -> {
 			calculator.add(TestUtils.NUMBERS_WITH_COMMA_DELIMITED_ALPHANUMERIC);
@@ -71,6 +78,11 @@ public class StringCalculatorTest {
 		Assertions.assertThrows(StringCalculatorException.class, () -> {
 			Integer result = calculator.add(TestUtils.NUMBERS_WITH_COMMA_DELIMITED_SPACED);
 		});
+	}
+
+	@Test
+	public void testAddWithLargeNumberAsParameter() throws StringCalculatorException {
+		assertEquals(calculator.add(BigInteger.valueOf(12374557765575L).toString()), Integer.valueOf(BigInteger.valueOf(12374557765575L).toString()));
 	}
 
 	@AfterAll
