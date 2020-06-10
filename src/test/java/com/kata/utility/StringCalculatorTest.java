@@ -32,6 +32,14 @@ public class StringCalculatorTest {
 	}
 
 	@Test
+	public void testAddWithNonTrimmedSpaceInsideNumbers() throws StringCalculatorException {
+		String message = Assertions.assertThrows(StringCalculatorException.class, () -> {
+			calculator.add(TestUtils.NUMBERS_WITH_COMMA_DELIMITED_WITHOUT_SPACE_TRIMMED_VALUES);
+		}).getMessage();
+		assertEquals(message, "Invalid String , numbers is either alphanumeric or it is improperly delimited");
+	}
+
+	@Test
 	public void testAddWithNullParameter() {
 		Assertions.assertThrows(StringCalculatorException.class, () -> {
 			calculator.add(null);
@@ -44,6 +52,21 @@ public class StringCalculatorTest {
 			calculator.add("");
 		}).getMessage();
 		assertEquals(message, "Null or Empty numbers are not allowed");
+	}
+
+	@Test
+	public void testAddWithAlphanumericParameter() {
+		String message = Assertions.assertThrows(StringCalculatorException.class, () -> {
+			calculator.add(TestUtils.NUMBERS_WITH_COMMA_DELIMITED_ALPHANUMERIC);
+		}).getMessage();
+		assertEquals(message, "Invalid String , numbers is either alphanumeric or it is improperly delimited");
+	}
+
+	@Test
+	public void testAddWithSpaceSeparatedParameter() throws StringCalculatorException {
+		Assertions.assertThrows(StringCalculatorException.class, () -> {
+			Integer result = calculator.add(TestUtils.NUMBERS_WITH_COMMA_DELIMITED_SPACED);
+		});
 	}
 
 	@AfterAll

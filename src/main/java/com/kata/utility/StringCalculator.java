@@ -13,6 +13,8 @@ public final class StringCalculator {
 
 		if (StringUtils.isEmpty(numbers)) {
 			throw new StringCalculatorException("Null or Empty numbers are not allowed");
+		} else if(!isNumericWithCommaDelimiter(numbers)) {
+			throw new StringCalculatorException("Invalid String , numbers is either alphanumeric or it is improperly delimited");
 		}
 
 		final AtomicInteger sum = new AtomicInteger(0);
@@ -22,5 +24,9 @@ public final class StringCalculator {
 		});
 
 		return sum.get();
+	}
+
+	public static boolean isNumericWithCommaDelimiter(String s) {
+		return s != null && s.matches("^[0-9,]*$");
 	}
 }
