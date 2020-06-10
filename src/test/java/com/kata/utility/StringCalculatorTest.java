@@ -28,16 +28,16 @@ public class StringCalculatorTest {
 
 	@Test
 	public void testAdd() throws StringCalculatorException {
-		Integer result = calculator.add(TestUtils.NUMBERS_WITH_COMMA_DELIMITED);
+		BigInteger result = calculator.add(TestUtils.NUMBERS_WITH_COMMA_DELIMITED);
 		assertNotNull(result);
-		assertEquals(TestUtils.expectedResultMap.get("NUMBERS_WITH_COMMA_DELIMITED"), result);
+		assertEquals(TestUtils.expectedResultMap.get("NUMBERS_WITH_COMMA_DELIMITED"), result.intValue());
 	}
 
 	@Test
 	public void testAddForEmptyString() throws StringCalculatorException {
-		Integer result = calculator.add("");
+		BigInteger result = calculator.add("");
 		assertNotNull(result);
-		assertEquals(0, result);
+		assertEquals(0, result.intValue());
 	}
 
 	@Test
@@ -57,12 +57,12 @@ public class StringCalculatorTest {
 
 	@Test
 	public void testAddWithEmptyParameter() throws StringCalculatorException {
-		assertEquals(calculator.add(" "), 0);
+		assertEquals(calculator.add(" ").intValue(), 0);
 	}
 
 	@Test
 	public void testAddWithOneParameter() throws StringCalculatorException {
-		assertEquals(calculator.add("1"), 1);
+		assertEquals(calculator.add("1").intValue(), 1);
 	}
 
 	@Test
@@ -76,13 +76,17 @@ public class StringCalculatorTest {
 	@Test
 	public void testAddWithSpaceSeparatedParameter() throws StringCalculatorException {
 		Assertions.assertThrows(StringCalculatorException.class, () -> {
-			Integer result = calculator.add(TestUtils.NUMBERS_WITH_COMMA_DELIMITED_SPACED);
+			BigInteger result = calculator.add(TestUtils.NUMBERS_WITH_COMMA_DELIMITED_SPACED);
 		});
 	}
 
 	@Test
 	public void testAddWithLargeNumberAsParameter() throws StringCalculatorException {
-		assertEquals(calculator.add(BigInteger.valueOf(12374557765575L).toString()), Integer.valueOf(BigInteger.valueOf(12374557765575L).toString()));
+		assertEquals(
+				calculator.add(new BigInteger("1234567890123456789012345678901234567890").toString() + ","
+						+ new BigInteger("1234567890123456789012345678901234567890").toString()),
+				new BigInteger("1234567890123456789012345678901234567890")
+						.add(new BigInteger("1234567890123456789012345678901234567890")));
 	}
 
 	@AfterAll
