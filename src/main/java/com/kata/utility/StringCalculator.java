@@ -11,6 +11,7 @@ public final class StringCalculator {
 
 	public Integer add(String numbers) throws StringCalculatorException {
 
+		
 		if (StringUtils.isEmpty(numbers)) {
 			throw new StringCalculatorException("Null or Empty numbers are not allowed");
 		} else if(!isNumericWithCommaDelimiter(numbers)) {

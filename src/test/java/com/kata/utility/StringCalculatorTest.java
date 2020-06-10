@@ -30,6 +30,13 @@ public class StringCalculatorTest {
 		assertNotNull(result);
 		assertEquals(TestUtils.expectedResultMap.get("NUMBERS_WITH_COMMA_DELIMITED"), result);
 	}
+	
+	@Test
+	public void testAddForEmptyString() throws StringCalculatorException {
+		Integer result = calculator.add("");
+		assertNotNull(result);
+		assertEquals(0, result);
+	}
 
 	@Test
 	public void testAddWithNonTrimmedSpaceInsideNumbers() throws StringCalculatorException {
