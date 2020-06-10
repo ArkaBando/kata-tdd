@@ -1,10 +1,14 @@
 package com.kata.utility;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import com.kata.exception.StringCalculatorException;
 
 public class StringCalculatorTest {
 
@@ -19,7 +23,28 @@ public class StringCalculatorTest {
 	public void isStringCalculatorInitializedProperly() {
 		assertNotNull(calculator);
 	}
+
+	@Test
+	public void testAdd() {
+		Integer result = calculator.add(TestUtils.NUMBERS_WITH_COMMA_DELIMITED);
+		assertNotNull(result);
+		assertEquals(TestUtils.expectedResultMap.get("NUMBERS_WITH_COMMA_DELIMITED"), result);
+	}
+
+	@Test
+	public void testAddWithNullParameter() {
+		Assertions.assertThrows(StringCalculatorException.class, () -> {
+			calculator.add(null);
+		});
+	}
 	
+	@Test
+	public void testAddWithEmptyParameter() {
+		Assertions.assertThrows(StringCalculatorException.class, () -> {
+			calculator.add("");
+		});
+	}
+
 	@AfterAll
 	public static void teardown() {
 		calculator = null;
