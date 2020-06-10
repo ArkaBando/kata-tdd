@@ -19,27 +19,19 @@ public final class StringCalculator {
 		final List<String> negativeNumbers = new ArrayList<>();
 
 		try {
+			
 			if (filterAndValidateArgument(numbers) == 0) {
 				return BigInteger.ZERO;
 			}
-
 			if (delimiters.size() > 0) {
 				numbers = numbers.substring(numbers.indexOf("\n") + 1);
 			}
 
 			Arrays.asList(numbers.split(",|\\n" + (delimiters.size() > 0 ? "|" + delimiters.get(0) : "")))
 					.forEach(number -> {
-
-						if (!StringUtils.isEmpty(number)) {
-							sum.updateAndGet((BigInteger no) -> {
-								if (new BigInteger(number).compareTo(BigInteger.ZERO) < 0) {
-									negativeNumbers.add(new BigInteger(number).toString());
-									return no;
-								}
-								return no.add(new BigInteger(number));
-							});
-						}
+						calculateSum(sum, negativeNumbers, number);
 					});
+			
 		} finally {
 			delimiters.clear();
 		}
@@ -50,6 +42,22 @@ public final class StringCalculator {
 			throw new StringCalculatorException("NegativeNumbers :" + negativeNumberResult + " Not Allowed");
 		}
 		return sum.get();
+	}
+
+	private void calculateSum(final AtomicReference<BigInteger> sum, final List<String> negativeNumbers,
+			String number) {
+		if (!StringUtils.isEmpty(number)) {
+			sum.updateAndGet((BigInteger currentNumber) -> {
+				BigInteger value = new BigInteger(number);
+				if (value.compareTo(BigInteger.ZERO) < 0) {
+					negativeNumbers.add(value.toString());
+					return currentNumber;
+				} else if (value.compareTo(new BigInteger("1000")) > 0) {
+					return currentNumber;
+				}
+				return currentNumber.add(value);
+			});
+		}
 	}
 
 	private Integer filterAndValidateArgument(String numbers) throws StringCalculatorException {
