@@ -10,16 +10,32 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.kata.exception.StringCalculatorException;
 
+/**
+ * StringCalculator is an utility class for performing addition of numbers based
+ * on kata problem as methioned in https://osherove.com/tdd-kata-2/
+ * 
+ * @author ARKA
+ *
+ */
 public final class StringCalculator {
 	private static final List<String> delimiters = new ArrayList<>();
 
+	/**
+	 * Utility method for adding numbers , Mainly it parses the given numbers string
+	 * and delegates computation to calculateSum()
+	 * 
+	 * @param numbers like 1,2,3,4,5
+	 * @return calculatedSum of numbers
+	 * @throws StringCalculatorException when number is negative or numbers is in
+	 * invalid format
+	 */
 	public BigInteger add(String numbers) throws StringCalculatorException {
 
 		final AtomicReference<BigInteger> sum = new AtomicReference<>(BigInteger.ZERO);
 		final List<String> negativeNumbers = new ArrayList<>();
 
 		try {
-			
+
 			if (filterAndValidateArgument(numbers) == 0) {
 				return BigInteger.ZERO;
 			}
@@ -31,7 +47,7 @@ public final class StringCalculator {
 					.forEach(number -> {
 						calculateSum(sum, negativeNumbers, number);
 					});
-			
+
 		} finally {
 			delimiters.clear();
 		}
@@ -44,6 +60,15 @@ public final class StringCalculator {
 		return sum.get();
 	}
 
+	/**
+	 * Method used for computing sum based on parsed values
+	 * 
+	 * @param sum              : sum of parsed numbers
+	 * @param negativeNumbers: list of negative numbers contained in user input
+	 *                         numbers string
+	 * @param number           : parsed number on which computation needs to be
+	 *                         performed
+	 */
 	private void calculateSum(final AtomicReference<BigInteger> sum, final List<String> negativeNumbers,
 			String number) {
 		if (!StringUtils.isEmpty(number)) {
@@ -60,6 +85,13 @@ public final class StringCalculator {
 		}
 	}
 
+	/**
+	 * For filtering and validating user input numbers
+	 * 
+	 * @param numbers
+	 * @return
+	 * @throws StringCalculatorException
+	 */
 	private Integer filterAndValidateArgument(String numbers) throws StringCalculatorException {
 
 		if (null != numbers && numbers.indexOf("//") == 0) {
@@ -71,7 +103,7 @@ public final class StringCalculator {
 			return 0;
 		} else if (StringUtils.isEmpty(numbers)) {
 			throw new StringCalculatorException("Null or Empty numbers are not allowed");
-		} else if (!isNumericWithCommaDelimiter(numbers)) {
+		} else if (!isValidNumber(numbers)) {
 			throw new StringCalculatorException(
 					"Invalid String , numbers is either alphanumeric or it is improperly delimited");
 		}
@@ -79,7 +111,13 @@ public final class StringCalculator {
 		return 1;
 	}
 
-	public static boolean isNumericWithCommaDelimiter(String s) {
+	/**
+	 * Used for validating user number string
+	 * 
+	 * @param s
+	 * @return
+	 */
+	public static boolean isValidNumber(String s) {
 		if (null != s && delimiters.size() > 0) {
 			s = s.replace(delimiters.get(0), "").replace("//", "");
 		}

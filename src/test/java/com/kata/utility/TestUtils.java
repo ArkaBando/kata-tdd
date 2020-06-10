@@ -2,6 +2,11 @@ package com.kata.utility;
 
 import java.util.HashMap;
 
+/**
+ * Utility Class for testing String Calculator
+ * @author ARKA
+ *
+ */
 public final class TestUtils {
 
 	public static final String NUMBERS_WITH_COMMA_DELIMITED = "1,2,3,4,5,";
